@@ -9,16 +9,16 @@ from selenium import webdriver
 from helper import check_by_xpath
 
 
-def hart_house(url: string, start: datetime, duration: int, driver: webdriver, timeout: int) -> \
+def registration(url: string, start: datetime, duration: int, driver: webdriver, timeout: int) -> \
         None:
     """
-    Register for a selected program at the hart house based on the url and date entered.\
-    :param timeout: How long the webdriver will search for web elements
-    :param driver: The webdriver
-    :param url The url of the program of target enrollment
-    :param start The start time of the program in the format of a datetime object
-    :param duration The duration of the program in minutes
-    """
+        Register for a selected program
+        :param timeout: How long the webdriver will search for web elements
+        :param driver: The webdriver
+        :param url The url of the program of target enrollment
+        :param start The start time of the program in the format of a datetime object
+        :param duration The duration of the program in minutes
+        """
     end = start + datetime.timedelta(minutes=duration)
     time_running = format_time(start) + ' - ' + format_time(end)
     driver.get("https://recreation.utoronto.ca/home/signin")
@@ -36,6 +36,19 @@ def hart_house(url: string, start: datetime, duration: int, driver: webdriver, t
                    driver)
     driver.find_element(By.XPATH, "//div[@data-instance-times= '" + time_running +
                         "']//button[@class = 'btn btn-primary']").click()
+
+
+def hart_house(url: string, start: datetime, duration: int, driver: webdriver, timeout: int) -> \
+        None:
+    """
+    Checkout for a hrat house program.
+    :param timeout: How long the webdriver will search for web elements
+    :param driver: The webdriver
+    :param url The url of the program of target enrollment
+    :param start The start time of the program in the format of a datetime object
+    :param duration The duration of the program in minutes
+    """
+    registration(url, start, duration, driver, timeout)
     check_by_xpath("//button[@id = 'checkoutButton']", timeout, driver)
     driver.find_element(By.XPATH, "//button[@id = 'checkoutButton']").click()
     check_by_xpath("//button[@onclick = 'Submit()']", timeout, driver)
@@ -46,31 +59,14 @@ def hart_house(url: string, start: datetime, duration: int, driver: webdriver, t
 
 def sport_rec(url: string, start: datetime, duration: int, driver: webdriver, timeout: int) -> None:
     """
-    Register for a selected program at the hart house based on the url and date entered.\
+    Checkout for a sport & rec program.
     :param timeout: How long the webdriver will search for web elements
     :param driver: The webdriver
     :param url The url of the program of target enrollment
     :param start The start time of the program in the format of a datetime object
     :param duration The duration of the program in minutes
     """
-    end = start + datetime.timedelta(minutes=duration)
-    time_running = format_time(start) + ' - ' + format_time(end)
-    driver.get("https://recreation.utoronto.ca/home/signin")
-    check_by_xpath("//button[@title= 'UTORid login for faculty, staff and students']", timeout,
-                   driver)
-    time.sleep(1)
-    WebDriverWait(driver, timeout) \
-        .until(EC.element_to_be_clickable((By.XPATH, "//button[@title= 'UTORid login for faculty,"
-                                                     " staff and students']"))).click()
-    check_by_xpath("//button[@id = 'gdpr-cookie-accept']", timeout, driver)
-    driver.find_element(By.XPATH, "//button[@id = 'gdpr-cookie-accept']").click()
-    driver.get(url)
-    check_by_xpath("//div[@data-instance-times= '" + time_running + "']//button[@class = "
-                                                                    "'btn btn-primary']", timeout,
-                   driver)
-    driver.find_element(By.XPATH, "//div[@data-instance-times= '" + time_running +
-                        "']//button[@class = 'btn btn-primary']").click()
-
+    registration(url, start, duration, driver, timeout)
     check_by_xpath("//button[@id= 'btnAccept']", timeout, driver)
     time.sleep(1)
     WebDriverWait(driver, timeout) \
