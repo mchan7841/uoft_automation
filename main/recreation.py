@@ -1,7 +1,7 @@
 """ Signing up for university of toronto recreation programs"""
+import time
 import string
 import datetime
-import time
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC

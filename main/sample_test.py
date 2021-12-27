@@ -1,10 +1,10 @@
 """Sample python script for recreation"""
-
 import yaml
 import datetime
 from selenium import webdriver
-from website_login import uoft_login
+from ucheck import ucheck
 from recreation import sport_rec
+from website_login import uoft_login
 
 DAYS = 2
 TIMEOUT = 5
@@ -21,6 +21,7 @@ password = conf['uoft_user']['password']
 driver = webdriver.Chrome()
 
 uoft_login(utorid, password, driver, TIMEOUT)
-sport_rec("https://recreation.utoronto.ca/Program/GetProgramDetails?courseId=d2a36cd8-bbb1-488d-"
-          "bdbd-6b7ed1302390&semesterId=0ceb5a30-42f1-4069-a97b-5e015b379e14",
-          datetime.datetime(2021, 12, 28, 17, 0), 50, driver, TIMEOUT)
+ucheck(driver, TIMEOUT)
+sport_rec("url", datetime.datetime(2021, 12, 28, 17, 0), 50, driver, TIMEOUT)
+
+# Add check for failed registration (Timeslot doesn't exist or HTML 500 errors)
