@@ -5,6 +5,12 @@ import yaml
 import datetime
 import time
 from selenium.webdriver.common.by import By
+from selenium.common.exceptions import TimeoutException
+from selenium.webdriver.support.ui import WebDriverWait
+from selenium.webdriver.support import expected_conditions as EC
+
+TIMEOUT = 5
+
 with open("login.yml", "r") as stream:
     try:
         conf = yaml.safe_load(stream)
@@ -29,7 +35,11 @@ def login(url: string, usernameid: string, username: string, passwordid: string,
     :param submitid: The element id of the submit button
     """
     driver.get(url)
-    time.sleep(2)
+    try:
+        element_present = EC.presence_of_element_located((By.ID, usernameid))
+        WebDriverWait(driver, TIMEOUT).until(element_present)
+    except TimeoutException:
+        print("Timed out waiting for page to load")
     driver.find_element(By.ID, usernameid).send_keys(username)
     driver.find_element(By.ID, passwordid).send_keys(password)
     driver.find_element(By.NAME, submitid).click()
@@ -81,7 +91,7 @@ def format_time(date_time: datetime) -> string:
     return str_date
 
 
-uoft_login("username", "Technogull1443")
+uoft_login("username", "password")
 program_time("https://recreation.utoronto.ca/Program/GetProgramDetails?courseId"
              "=d02a8d46-e2d5-450b-90d9-de40a36d870c&semesterId=0ceb5a30-42f1-4069-a97b"
              "-5e015b379e14", datetime.datetime(2021, 12, 30, 19, 0), 60)
