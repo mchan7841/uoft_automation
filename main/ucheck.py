@@ -1,6 +1,5 @@
 """ Ucheck """
 from selenium import webdriver
-import yaml
 import time
 from selenium.webdriver.common.by import By
 

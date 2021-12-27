@@ -3,7 +3,6 @@ import string
 from selenium import webdriver
 import yaml
 import datetime
-import time
 from selenium.webdriver.common.by import By
 from selenium.common.exceptions import TimeoutException
 from selenium.webdriver.support.ui import WebDriverWait
@@ -56,35 +55,145 @@ def uoft_login(utorid: string, password: string) -> None:
     passwordid = "password"
     submitid = "_eventId_proceed"
     login(url, usernameid, utorid, passwordid, password, submitid)
-    time.sleep(4)
+    try:
+        element_present = EC.presence_of_element_located((By.ID, "idBtn_Back"))
+        WebDriverWait(driver, TIMEOUT).until(element_present)
+    except TimeoutException:
+        print("Timed out waiting for page to load")
     driver.find_element(By.ID, "idBtn_Back").click()
 
 
-def program_time(url: string, start: datetime, duration: int) -> None:
+def hart_house(url: string, start: datetime, duration: int) -> None:
     """
-    Register for a selected program based on the url and date entered.
+    Register for a selected program at the hart house based on the url and date entered.\
+    :param url
+    :param start The start time of the program in the format of a datetime object
+    :param duration The duration of the program in minutes
     """
     end = start + datetime.timedelta(minutes=duration)
     time_running = format_time(start) + ' - ' + format_time(end)
     driver.get("https://recreation.utoronto.ca/home/signin")
-    time.sleep(2)
-    # Click on a pop-up window
-    driver.find_element(By.XPATH,
-                        "//button[@title= 'UTORid login for faculty, staff and students']").click()
-    time.sleep(4)
+    try:
+        element_present = EC.presence_of_element_located((By.XPATH,
+                                                          "//button[@title= 'UTORid login for "
+                                                          "faculty, staff and students']"))
+        WebDriverWait(driver, TIMEOUT).until(element_present)
+    except TimeoutException:
+        print("Timed out waiting for page to load")
+    WebDriverWait(driver, TIMEOUT).until(EC.element_to_be_clickable((By.XPATH,
+                                                                     "//button[@title= 'UTORid "
+                                                                     "login for faculty, staff and "
+                                                                     "students']"
+                                                                     ))).click()
+    try:
+        element_present = EC.presence_of_element_located((By.XPATH, "//button[@id = "
+                                                                    "'gdpr-cookie-accept']"))
+        WebDriverWait(driver, TIMEOUT).until(element_present)
+    except TimeoutException:
+        print("Timed out waiting for page to load")
     driver.find_element(By.XPATH, "//button[@id = 'gdpr-cookie-accept']").click()
     driver.get(url)
-    time.sleep(2)
+    try:
+        element_present = EC.presence_of_element_located((By.XPATH, "//div[@data-instance-times= '"
+                                                          + time_running + "']//button[@class = "
+                                                                           "'btn btn-primary']"))
+        WebDriverWait(driver, TIMEOUT).until(element_present)
+    except TimeoutException:
+        print("Timed out waiting for page to load")
     driver.find_element(By.XPATH, "//div[@data-instance-times= '" + time_running +
                         "']//button[@class = 'btn btn-primary']").click()
-    time.sleep(2)
+    try:
+        element_present = EC.presence_of_element_located((By.XPATH, "//button[@id ="
+                                                                    " 'checkoutButton']"))
+        WebDriverWait(driver, TIMEOUT).until(element_present)
+    except TimeoutException:
+        print("Timed out waiting for page to load")
     driver.find_element(By.XPATH, "//button[@id = 'checkoutButton']").click()
-    time.sleep(1)
-    driver.find_element(By.XPATH, "//button[@onclick = 'Submit()']").click()
+    try:
+        element_present = EC.presence_of_element_located((By.XPATH, "//button[@onclick ="
+                                                                    " 'Submit()']"))
+        WebDriverWait(driver, TIMEOUT).until(element_present)
+    except TimeoutException:
+        print("Timed out waiting for page to load")
+    # Error here (element not interactable)
+    WebDriverWait(driver, TIMEOUT).until(EC.element_to_be_clickable((By.XPATH, "//button[@onclick "
+                                                                               "= 'Submit()']"
+                                                                     ))).click()
+    print("You have successfully been signed up")
+
+
+def sport_rec(url: string, start: datetime, duration: int) -> None:
+    """
+    Register for a selected program at the hart house based on the url and date entered.\
+    :param url
+    :param start The start time of the program in the format of a datetime object
+    :param duration The duration of the program in minutes
+    """
+    end = start + datetime.timedelta(minutes=duration)
+    time_running = format_time(start) + ' - ' + format_time(end)
+    driver.get("https://recreation.utoronto.ca/home/signin")
+    try:
+        element_present = EC.presence_of_element_located((By.XPATH,
+                                                          "//button[@title= 'UTORid login for "
+                                                          "faculty, staff and students']"))
+        WebDriverWait(driver, TIMEOUT).until(element_present)
+    except TimeoutException:
+        print("Timed out waiting for page to load")
+    WebDriverWait(driver, TIMEOUT).until(EC.element_to_be_clickable((By.XPATH,
+                                                                     "//button[@title= 'UTORid "
+                                                                     "login for faculty, staff and "
+                                                                     "students']"
+                                                                     ))).click()
+    try:
+        element_present = EC.presence_of_element_located((By.XPATH, "//button[@id = "
+                                                                    "'gdpr-cookie-accept']"))
+        WebDriverWait(driver, TIMEOUT).until(element_present)
+    except TimeoutException:
+        print("Timed out waiting for page to load")
+    driver.find_element(By.XPATH, "//button[@id = 'gdpr-cookie-accept']").click()
+    driver.get(url)
+    try:
+        element_present = EC.presence_of_element_located((By.XPATH, "//div[@data-instance-times= '"
+                                                          + time_running + "']//button[@class = "
+                                                                           "'btn btn-primary']"))
+        WebDriverWait(driver, TIMEOUT).until(element_present)
+    except TimeoutException:
+        print("Timed out waiting for page to load")
+    driver.find_element(By.XPATH, "//div[@data-instance-times= '" + time_running +
+                        "']//button[@class = 'btn btn-primary']").click()
+
+    try:
+        element_present = EC.presence_of_element_located((By.XPATH, "//button[@id= 'btnAccept']"))
+        WebDriverWait(driver, TIMEOUT).until(element_present)
+    except TimeoutException:
+        print("Timed out waiting for page to load")
+    driver.find_element(By.XPATH, "//button[@id= 'btnAccept']").click()
+    try:
+        element_present = EC.presence_of_element_located((By.XPATH, "//button[@id ="
+                                                                    " 'checkoutButton']"))
+        WebDriverWait(driver, TIMEOUT).until(element_present)
+    except TimeoutException:
+        print("Timed out waiting for page to load")
+    driver.find_element(By.XPATH, "//button[@id = 'checkoutButton']").click()
+    try:
+        element_present = EC.presence_of_element_located((By.XPATH, "//button[@onclick ="
+                                                                    " 'Submit()']"))
+        WebDriverWait(driver, TIMEOUT).until(element_present)
+    except TimeoutException:
+        print("Timed out waiting for page to load")
+    # Error here (element not interactable)
+    WebDriverWait(driver, TIMEOUT).until(EC.element_to_be_clickable((By.XPATH, "//button[@onclick "
+                                                                               "= 'Submit()']"
+                                                                     ))).click()
     print("You have successfully been signed up")
 
 
 def format_time(date_time: datetime) -> string:
+    """
+    A function that reformats datetime objects into a string usable to find the web element
+    :param date_time: A datetime object
+    :return: Returns the formatted date time object
+    """
     str_date = date_time.strftime('%I:%M %p')
     if str_date[0] == '0':
         str_date = str_date[1:]
@@ -92,6 +201,6 @@ def format_time(date_time: datetime) -> string:
 
 
 uoft_login("username", "password")
-program_time("https://recreation.utoronto.ca/Program/GetProgramDetails?courseId"
-             "=d02a8d46-e2d5-450b-90d9-de40a36d870c&semesterId=0ceb5a30-42f1-4069-a97b"
-             "-5e015b379e14", datetime.datetime(2021, 12, 30, 19, 0), 60)
+sport_rec("https://recreation.utoronto.ca/Program/GetProgramDetails?courseId=d2a36cd8-bbb1"
+          "-488d-bdbd-6b7ed1302390&semesterId=0ceb5a30-42f1-4069-a97b-5e015b379e14",
+          datetime.datetime(2021, 12, 28, 18, 0), 50)
