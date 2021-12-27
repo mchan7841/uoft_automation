@@ -1,11 +1,13 @@
+"""Sample python script for recreation"""
 
 import yaml
-import time
-import website_login
-import recreation
 import datetime
+from selenium import webdriver
+from website_login import uoft_login
+from recreation import sport_rec
 
 DAYS = 2
+TIMEOUT = 5
 
 with open("login.yml", "r") as stream:
     try:
@@ -16,8 +18,9 @@ with open("login.yml", "r") as stream:
 utorid = conf['uoft_user']['utorid']
 password = conf['uoft_user']['password']
 
-website_login.uoft_login(utorid, password)
-time.sleep(5)
-recreation.program_time("https://recreation.utoronto.ca/Program/GetProgramDetails?courseId"
-                        "=d02a8d46-e2d5-450b-90d9-de40a36d870c&semesterId=0ceb5a30-42f1-4069-a97b"
-                        "-5e015b379e14", datetime.datetime(2021, 12, 30, 19, 0), 60)
+driver = webdriver.Chrome()
+
+uoft_login(utorid, password, driver, TIMEOUT)
+sport_rec("https://recreation.utoronto.ca/Program/GetProgramDetails?courseId=d2a36cd8-bbb1-488d-"
+          "bdbd-6b7ed1302390&semesterId=0ceb5a30-42f1-4069-a97b-5e015b379e14",
+          datetime.datetime(2021, 12, 28, 17, 0), 50, driver, TIMEOUT)

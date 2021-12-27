@@ -17,6 +17,13 @@
             </Attribute>
           </value>
         </entry>
+        <entry key="\main\recreation.py">
+          <value>
+            <Attribute>
+              <option name="separator" value=":" />
+            </Attribute>
+          </value>
+        </entry>
         <entry key="\main\sample_test.py">
           <value>
             <Attribute>
