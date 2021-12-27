@@ -1,4 +1,4 @@
-# uoft_booking
+# uoft_automation
 
 Disclaimer
 - Selenium / Webiste Changes
