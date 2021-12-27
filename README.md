@@ -1,6 +1,7 @@
 # uoft_automation
 
 Disclaimer
+- Driver
 - Selenium / Webiste Changes
 - Passwords and Usernames
 
